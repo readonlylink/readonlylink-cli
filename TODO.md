@@ -1,3 +1,2 @@
 - `LogoutCommand`
-- `WhoCommand`
 - `PublishCommand`

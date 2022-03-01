@@ -6,6 +6,10 @@ import * as Commands from "./commands"
 export function createCommandRunner(): CommandRunner {
   return new CommandRunners.CommonCommandRunner({
     defaultCommand: new CommonHelpCommand(),
-    commands: [new Commands.LoginCommand(), new CommonHelpCommand()],
+    commands: [
+      new Commands.LoginCommand(),
+      new Commands.WhoCommand(),
+      new CommonHelpCommand(),
+    ],
   })
 }

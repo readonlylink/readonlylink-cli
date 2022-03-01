@@ -2,6 +2,9 @@ import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
 import axios from "axios"
+import Path from "path"
+import fs from "fs"
+import os from "os"
 
 type Args = { email: string }
 type Opts = { name?: string }
@@ -34,22 +37,34 @@ export class LoginCommand extends Command<Args, Opts> {
 
     console.log({ email })
 
-    const {
-      data: {
-        verifying: { confirmation_code, links },
-      },
-    } = await axios.post(
+    const response = await axios.post(
       "http://localhost:8000/api/login",
       { email: argv.email },
       { headers: { "Content-Type": "application/json" } }
     )
 
-    console.log({ confirmation_code, links })
+    const { confirmation_code, links } = response.data
+
+    console.log({
+      message: "Waiting for email confirmation.",
+      confirmation_code,
+    })
 
     setInterval(async () => {
       try {
         const { data } = await axios.get(links.verify_for_token)
-        console.log(data)
+
+        const path = Path.resolve(os.homedir(), ".readonlylink/access-token")
+        await fs.promises.mkdir(Path.dirname(path), { recursive: true })
+        await fs.promises.writeFile(path, data.token)
+
+        console.log({
+          message: "Login success, access token saved.",
+          username: data.username,
+          path,
+        })
+
+        process.exit(0)
       } catch (error) {
         if (!axios.isAxiosError(error)) throw error
         if (error.response?.status !== 404) {

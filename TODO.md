@@ -1,2 +1,5 @@
-- `LoginCommand` save access token to `~/.readonlylink`
+- config production and local url
+
+- `LoginCommand` do not login if already logged-in
+- `WhoCommand`
 - `PublishCommand`

@@ -1,3 +1,3 @@
-- `LoginCommand` do not login if already logged-in
+- `LogoutCommand`
 - `WhoCommand`
 - `PublishCommand`

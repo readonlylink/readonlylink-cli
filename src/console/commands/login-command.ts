@@ -7,7 +7,7 @@ import fs from "fs"
 import os from "os"
 
 type Args = { email: string }
-type Opts = { name?: string }
+type Opts = { force?: boolean }
 
 export class LoginCommand extends Command<Args, Opts> {
   name = "login"
@@ -15,7 +15,7 @@ export class LoginCommand extends Command<Args, Opts> {
   description = "Login Readonly.Link by email"
 
   args = { email: ty.string() }
-  opts = {}
+  opts = { force: ty.optional(ty.boolean()) }
 
   // prettier-ignore
   help(runner: CommandRunner): string {
@@ -33,6 +33,10 @@ export class LoginCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
+    if (!argv.force) {
+      await checkLoggedIn(argv.email)
+    }
+
     try {
       const links = await login(argv.email)
       setInterval(() => verify(links), 1000)
@@ -42,6 +46,22 @@ export class LoginCommand extends Command<Args, Opts> {
       process.exit(1)
     }
   }
+}
+
+const PREFIX = Path.resolve(os.homedir(), ".readonlylink")
+
+async function checkLoggedIn(email: string): Promise<void> {
+  if (!fs.existsSync(PREFIX + "/username")) return
+
+  const username = await fs.promises.readFile(PREFIX + "/username", "utf8")
+
+  console.log({
+    message: "Already logged-in. Please use --force to login again.",
+    suggested_command: `ro login ${email} --force`,
+    username,
+  })
+
+  process.exit(1)
 }
 
 type Links = {
@@ -70,14 +90,12 @@ async function verify(links: Links): Promise<void> {
   try {
     const { data } = await axios.get(links.verify_for_token)
 
-    const path = Path.resolve(os.homedir(), ".readonlylink/access-token")
-    await fs.promises.mkdir(Path.dirname(path), { recursive: true })
-    await fs.promises.writeFile(path, data.token)
+    await saveText(PREFIX + "/access-token", data.token)
+    await saveText(PREFIX + "/username", data.username)
 
     console.log({
-      message: "Login success, access token saved.",
+      message: "Login success, information saved in ~/.readonlylink",
       username: data.username,
-      path,
     })
 
     process.exit(0)
@@ -85,4 +103,9 @@ async function verify(links: Links): Promise<void> {
     if (!axios.isAxiosError(error)) throw error
     if (error.response?.status !== 404) throw error
   }
+}
+
+async function saveText(path: string, text: string): Promise<void> {
+  await fs.promises.mkdir(Path.dirname(path), { recursive: true })
+  await fs.promises.writeFile(path, text)
 }

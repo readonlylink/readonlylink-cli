@@ -33,44 +33,56 @@ export class LoginCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
-    const { email } = argv
+    try {
+      const links = await login(argv.email)
+      setInterval(() => verify(links), 1000)
+    } catch (error) {
+      if (!axios.isAxiosError(error)) throw error
+      console.error({ message: error.message, data: error.response?.data })
+      process.exit(1)
+    }
+  }
+}
 
-    console.log({ email })
+type Links = {
+  verify_for_token: string
+}
 
-    const response = await axios.post(
-      "http://localhost:8000/api/login",
-      { email: argv.email },
-      { headers: { "Content-Type": "application/json" } }
-    )
+async function login(email: string): Promise<Links> {
+  const url =
+    process.env.NODE_ENV === "dev"
+      ? "http://localhost:8000/api/login"
+      : "https://readonly.link/api/login"
 
-    const { confirmation_code, links } = response.data
+  const response = await axios.post(url, { email })
+
+  const { confirmation_code, links } = response.data
+
+  console.log({
+    message: "Waiting for email confirmation.",
+    confirmation_code,
+  })
+
+  return links
+}
+
+async function verify(links: Links): Promise<void> {
+  try {
+    const { data } = await axios.get(links.verify_for_token)
+
+    const path = Path.resolve(os.homedir(), ".readonlylink/access-token")
+    await fs.promises.mkdir(Path.dirname(path), { recursive: true })
+    await fs.promises.writeFile(path, data.token)
 
     console.log({
-      message: "Waiting for email confirmation.",
-      confirmation_code,
+      message: "Login success, access token saved.",
+      username: data.username,
+      path,
     })
 
-    setInterval(async () => {
-      try {
-        const { data } = await axios.get(links.verify_for_token)
-
-        const path = Path.resolve(os.homedir(), ".readonlylink/access-token")
-        await fs.promises.mkdir(Path.dirname(path), { recursive: true })
-        await fs.promises.writeFile(path, data.token)
-
-        console.log({
-          message: "Login success, access token saved.",
-          username: data.username,
-          path,
-        })
-
-        process.exit(0)
-      } catch (error) {
-        if (!axios.isAxiosError(error)) throw error
-        if (error.response?.status !== 404) {
-          console.log(error)
-        }
-      }
-    }, 1000)
+    process.exit(0)
+  } catch (error) {
+    if (!axios.isAxiosError(error)) throw error
+    if (error.response?.status !== 404) throw error
   }
 }

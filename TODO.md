@@ -1,2 +1,2 @@
-- `LoginCommand`
+- `LoginCommand` save access token to `~/.readonlylink`
 - `PublishCommand`

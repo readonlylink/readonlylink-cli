@@ -5,16 +5,16 @@ import fs from "fs"
 import os from "os"
 import Path from "path"
 
-type Args = { email: string }
-type Opts = { force?: boolean }
+type Args = {}
+type Opts = {}
 
 export class LogoutCommand extends Command<Args, Opts> {
   name = "logout"
 
   description = "Logout the current logged-in user"
 
-  args = { email: ty.string() }
-  opts = { force: ty.optional(ty.boolean()) }
+  args = {}
+  opts = {}
 
   // prettier-ignore
   help(runner: CommandRunner): string {

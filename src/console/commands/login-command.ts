@@ -39,7 +39,7 @@ export class LoginCommand extends Command<Args, Opts> {
 
     try {
       const links = await login(argv.email)
-      setInterval(() => verify(links), 1000)
+      setInterval(() => verify(links), 3000)
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error
       console.dir(

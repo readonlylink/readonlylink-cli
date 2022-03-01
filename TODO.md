@@ -1,2 +1,2 @@
 - `LoginCommand`
-- publish projects to readonly.link
+- `PublishCommand`

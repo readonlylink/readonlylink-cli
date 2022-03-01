@@ -1,6 +1,6 @@
 {
   "name": "@readonlylink/cli",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "repository": "github:readonlylink/readonlylink-cli",
   "files": [
     "lib"
@@ -10,7 +10,7 @@
     "watch": "tsc --watch",
     "test:js": "enchanter test node 'lib/**/*.test.js'",
     "test": "npm-run-all test:*",
-    "format": "prettier src docs --write"
+    "format": "prettier src --write"
   },
   "bin": {
     "ro": "bin/ro.js"

@@ -42,7 +42,13 @@ export class LoginCommand extends Command<Args, Opts> {
       setInterval(() => verify(links), 1000)
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error
-      console.error({ message: error.message, data: error.response?.data })
+      console.dir(
+        {
+          message: error.message,
+          data: error.response?.data,
+        },
+        { depth: null }
+      )
       process.exit(1)
     }
   }

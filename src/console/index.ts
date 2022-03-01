@@ -8,6 +8,7 @@ export function createCommandRunner(): CommandRunner {
     defaultCommand: new CommonHelpCommand(),
     commands: [
       new Commands.LoginCommand(),
+      new Commands.LogoutCommand(),
       new Commands.WhoCommand(),
       new CommonHelpCommand(),
     ],

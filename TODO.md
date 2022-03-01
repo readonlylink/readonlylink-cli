@@ -1,2 +1,1 @@
-- `LogoutCommand`
 - `PublishCommand`

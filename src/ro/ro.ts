@@ -13,27 +13,19 @@ export class Ro {
       : "https://readonly.link/api",
   }
 
+  local = new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
+
   url(path: string): string {
     return this.config.base_url + path
   }
 
-  resolve(path: string): string {
-    const prefix = Path.resolve(os.homedir(), ".readonlylink")
-    return `${prefix}/${path}`
-  }
-
   async isLoggedIn(email: string): Promise<boolean> {
-    if (!fs.existsSync(this.resolve("username"))) return false
-
-    const username = await fs.promises.readFile(
-      this.resolve("username"),
-      "utf8"
-    )
+    if (!(await this.local.has("username"))) return false
 
     console.log({
       message: "Already logged-in. Please use --force to login again.",
       suggested_command: `ro login ${email} --force`,
-      username,
+      username: await this.local.get("username"),
     })
 
     return true
@@ -56,8 +48,8 @@ export class Ro {
     try {
       const { data } = await axios.get(links.verify_for_token)
 
-      await saveText(this.resolve("access-token"), data.token)
-      await saveText(this.resolve("username"), data.username)
+      await this.local.put("access-token", data.token)
+      await this.local.put("username", data.username)
 
       console.log({
         message: "Login success, information saved in ~/.readonlylink",
@@ -72,18 +64,15 @@ export class Ro {
   }
 
   async logout(): Promise<void> {
-    if (!fs.existsSync(this.resolve("username"))) {
+    if (!(await this.local.has("username"))) {
       console.log({ message: "Nobody is logged-in yet." })
       return
     }
 
-    const username = await fs.promises.readFile(
-      this.resolve("username"),
-      "utf8"
-    )
+    const username = await this.local.get("username")
 
-    fs.rmSync(this.resolve("username"), { force: true })
-    fs.rmSync(this.resolve("access-token"), { force: true })
+    await this.local.delete("username")
+    await this.local.delete("access-token")
 
     console.log({
       message: "Logout successful.",
@@ -92,12 +81,9 @@ export class Ro {
   }
 
   async who(): Promise<void> {
-    if (!fs.existsSync(this.resolve("username"))) return
-    const username = await fs.promises.readFile(
-      this.resolve("username"),
-      "utf8"
-    )
-    console.log(username)
+    if (!(await this.local.has("username"))) return
+
+    console.log(await this.local.get("username"))
   }
 }
 
@@ -131,4 +117,34 @@ async function info(): Promise<void> {
   //   if (!axios.isAxiosError(error)) throw error
   //   else console.log(error.response.data)
   // }
+}
+
+class LocalFileStore {
+  constructor(public root: string) {}
+
+  resolve(path: string): string {
+    return `${this.root}/${path}`
+  }
+
+  async has(path: string): Promise<boolean> {
+    try {
+      await fs.promises.access(this.resolve(path))
+      const stats = await fs.promises.lstat(this.resolve(path))
+      return stats.isFile()
+    } catch (_error) {
+      return false
+    }
+  }
+
+  async get(path: string): Promise<string> {
+    return await fs.promises.readFile(this.resolve(path), "utf8")
+  }
+
+  async put(path: string, text: string): Promise<void> {
+    await saveText(this.resolve(path), text)
+  }
+
+  async delete(path: string): Promise<void> {
+    await fs.promises.rm(this.resolve(path), { force: true })
+  }
 }

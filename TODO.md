@@ -1,4 +1,4 @@
-- [refactor] `Ro` more helper functions
+- [refactor] inline `saveText`
 - [refactor] inject `config` to `Ro`
 - `UploadCommand`
 - `DownloadCommand`

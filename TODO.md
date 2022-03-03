@@ -1,2 +1,2 @@
-- `UploadCommand`
 - `DownloadCommand`
+- `UploadCommand`

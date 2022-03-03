@@ -9,7 +9,7 @@ export class Ro {
 
   local = new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 
-  url(path: string): string {
+  api(path: string): string {
     return this.config.base_url + path
   }
 
@@ -26,7 +26,7 @@ export class Ro {
   }
 
   async login(email: string): Promise<{ verify_for_token: string }> {
-    const response = await axios.post(this.url("/login"), { email })
+    const response = await axios.post(this.api("/login"), { email })
 
     const { confirmation_code, links } = response.data
 
@@ -81,27 +81,16 @@ export class Ro {
 
     console.log(username)
   }
-}
 
-async function info(): Promise<void> {
-  const url = "http://localhost:8000/api/files/xieyuheng/test2/-/k1/README.md"
-  // const url = "http://localhost:8000/api/user"
-  // const url =
-  //   process.env.NODE_ENV === "dev"
-  //   ? "http://localhost:8000/api/user"
-  //   : "https://readonly.link/api/user"
+  async download(name: string): Promise<Record<string, string>> {
+    const token = await this.local.get("access-token")
 
-  // const token = await fs.promises.readFile(PREFIX + "/access-token", "utf8")
+    const { data: files } = await axios.get(this.api(`/files/${name}`), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 
-  // try {
-  //   const response = await axios.put(url, 'haha', {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //   console.log(response.data)
-  // } catch (error) {
-  //   if (!axios.isAxiosError(error)) throw error
-  //   else console.log(error.response.data)
-  // }
+    return files
+  }
 }

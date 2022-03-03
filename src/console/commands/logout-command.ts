@@ -26,8 +26,7 @@ export class LogoutCommand extends Command<Args, Opts> {
     ].join("\n")
   }
 
-  async execute(argv: Args & Opts): Promise<void> {
-    const app = await App.build()
+  async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
     const ro = app.create(Ro)
     await ro.logout()
   }

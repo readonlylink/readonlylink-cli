@@ -2,15 +2,10 @@ import axios from "axios"
 import os from "os"
 import Path from "path"
 import { LocalFileStore } from "../infra/local-file-store"
+import { Config } from "../config"
 
 export class Ro {
-  isDev = process.env.NODE_ENV === "dev"
-
-  config = {
-    base_url: this.isDev
-      ? "http://localhost:8000/api"
-      : "https://readonly.link/api",
-  }
+  constructor(public config: Config) {}
 
   local = new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 

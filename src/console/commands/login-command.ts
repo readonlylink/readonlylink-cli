@@ -3,6 +3,7 @@ import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
 import axios from "axios"
 import { Ro } from "../../ro"
+import { App } from "../../app"
 
 type Args = { email: string }
 type Opts = { force?: boolean }
@@ -31,7 +32,8 @@ export class LoginCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
-    const ro = new Ro()
+    const app = await App.build()
+    const ro = app.create(Ro)
 
     if (!argv.force) {
       if (await ro.isLoggedIn(argv.email)) process.exit(1)

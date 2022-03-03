@@ -1,6 +1,7 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import { Ro } from "../../ro"
+import { App } from "../../app"
 
 type Args = {}
 type Opts = {}
@@ -27,8 +28,8 @@ export class WhoCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
-    const ro = new Ro()
-
+    const app = await App.build()
+    const ro = app.create(Ro)
     await ro.who()
   }
 }

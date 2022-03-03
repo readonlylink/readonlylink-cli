@@ -30,7 +30,7 @@ export class Ro {
     return true
   }
 
-  async login(email: string): Promise<Links> {
+  async login(email: string): Promise<{ verify_for_token: string }> {
     const response = await axios.post(this.url("/login"), { email })
 
     const { confirmation_code, links } = response.data
@@ -43,7 +43,7 @@ export class Ro {
     return links
   }
 
-  async verify(links: Links): Promise<void> {
+  async verify(links: { verify_for_token: string }): Promise<void> {
     try {
       const { data } = await axios.get(links.verify_for_token)
 
@@ -82,12 +82,10 @@ export class Ro {
   async who(): Promise<void> {
     if (!(await this.local.has("username"))) return
 
-    console.log(await this.local.get("username"))
-  }
-}
+    const username = await this.local.get("username")
 
-type Links = {
-  verify_for_token: string
+    console.log(username)
+  }
 }
 
 async function info(): Promise<void> {

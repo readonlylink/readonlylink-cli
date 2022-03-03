@@ -15,7 +15,7 @@ export class LogoutCommand extends Command<Args, Opts> {
   opts = {}
 
   // prettier-ignore
-  help(runner: CommandRunner): string {
+  help(runner: CommandRunner<App>): string {
     const { blue } = this.colors
 
     return [

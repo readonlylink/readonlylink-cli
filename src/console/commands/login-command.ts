@@ -17,7 +17,7 @@ export class LoginCommand extends Command<Args, Opts> {
   opts = { force: ty.optional(ty.boolean()) }
 
   // prettier-ignore
-  help(runner: CommandRunner): string {
+  help(runner: CommandRunner<App>): string {
     const { blue } = this.colors
 
     return [

@@ -1,8 +1,5 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
-import fs from "fs"
-import os from "os"
-import Path from "path"
 import { Ro } from "../../ro"
 
 type Args = {}

@@ -1,8 +1,7 @@
-import ty from "@xieyuheng/ty"
 import axios from "axios"
-import fs from "fs"
 import os from "os"
 import Path from "path"
+import { LocalFileStore } from "../infra/local-file-store"
 
 export class Ro {
   isDev = process.env.NODE_ENV === "dev"
@@ -91,11 +90,6 @@ type Links = {
   verify_for_token: string
 }
 
-async function saveText(path: string, text: string): Promise<void> {
-  await fs.promises.mkdir(Path.dirname(path), { recursive: true })
-  await fs.promises.writeFile(path, text)
-}
-
 async function info(): Promise<void> {
   const url = "http://localhost:8000/api/files/xieyuheng/test2/-/k1/README.md"
   // const url = "http://localhost:8000/api/user"
@@ -117,34 +111,4 @@ async function info(): Promise<void> {
   //   if (!axios.isAxiosError(error)) throw error
   //   else console.log(error.response.data)
   // }
-}
-
-class LocalFileStore {
-  constructor(public root: string) {}
-
-  resolve(path: string): string {
-    return `${this.root}/${path}`
-  }
-
-  async has(path: string): Promise<boolean> {
-    try {
-      await fs.promises.access(this.resolve(path))
-      const stats = await fs.promises.lstat(this.resolve(path))
-      return stats.isFile()
-    } catch (_error) {
-      return false
-    }
-  }
-
-  async get(path: string): Promise<string> {
-    return await fs.promises.readFile(this.resolve(path), "utf8")
-  }
-
-  async put(path: string, text: string): Promise<void> {
-    await saveText(this.resolve(path), text)
-  }
-
-  async delete(path: string): Promise<void> {
-    await fs.promises.rm(this.resolve(path), { force: true })
-  }
 }

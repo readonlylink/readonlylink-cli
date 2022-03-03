@@ -1,4 +1,3 @@
-- [refactor] inline `saveText`
 - [refactor] inject `config` to `Ro`
 - `UploadCommand`
 - `DownloadCommand`

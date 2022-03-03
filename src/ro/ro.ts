@@ -1,8 +1,8 @@
 import axios from "axios"
 import os from "os"
 import Path from "path"
-import { LocalFileStore } from "../infra/local-file-store"
 import { Config } from "../config"
+import { LocalFileStore } from "../infra/local-file-store"
 
 export class Ro {
   constructor(public config: Config) {}

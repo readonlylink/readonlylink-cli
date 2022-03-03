@@ -2,8 +2,8 @@ import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
 import axios from "axios"
-import { Ro } from "../../ro"
 import { App } from "../../app"
+import { Ro } from "../../ro"
 
 type Args = { email: string }
 type Opts = { force?: boolean }

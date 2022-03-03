@@ -1,1 +1,4 @@
-- `PublishCommand`
+- [refactor] `Ro` more helper functions
+- [refactor] inject `config` to `Ro`
+- `UploadCommand`
+- `DownloadCommand`

@@ -3,6 +3,8 @@ import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import fs from "fs"
 import os from "os"
 import Path from "path"
+import axios from "axios"
+import { Ro } from "../../ro"
 
 type Args = {}
 type Opts = {}
@@ -29,14 +31,8 @@ export class WhoCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
-    await who()
+    const ro = new Ro()
+
+    await ro.who()
   }
-}
-
-const PREFIX = Path.resolve(os.homedir(), ".readonlylink")
-
-async function who(): Promise<void> {
-  if (!fs.existsSync(PREFIX + "/username")) return
-  const username = await fs.promises.readFile(PREFIX + "/username", "utf8")
-  console.log(username)
 }

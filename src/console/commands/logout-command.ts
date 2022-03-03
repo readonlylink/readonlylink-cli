@@ -3,6 +3,7 @@ import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import fs from "fs"
 import os from "os"
 import Path from "path"
+import { Ro } from "../../ro"
 
 type Args = {}
 type Opts = {}
@@ -28,25 +29,8 @@ export class LogoutCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts): Promise<void> {
-    await logout()
+    const ro = new Ro()
+
+    await ro.logout()
   }
-}
-
-const PREFIX = Path.resolve(os.homedir(), ".readonlylink")
-
-async function logout(): Promise<void> {
-  if (!fs.existsSync(PREFIX + "/username")) {
-    console.log({ message: "Nobody is logged-in yet." })
-    return
-  }
-
-  const username = await fs.promises.readFile(PREFIX + "/username", "utf8")
-
-  fs.rmSync(PREFIX + "/username", { force: true })
-  fs.rmSync(PREFIX + "/access-token", { force: true })
-
-  console.log({
-    message: "Logout successful.",
-    username,
-  })
 }

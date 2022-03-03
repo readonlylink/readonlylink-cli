@@ -8,12 +8,12 @@ import * as Commands from "./commands"
 export async function buildCommandRunner(): Promise<CommandRunner> {
   return createCommandRunner({
     app: await App.build(),
-    defaultCommand: new Commands.CommonHelpCommand(),
+    defaultCommand: new Commands.HelpCommand(),
     commands: [
       new Commands.LoginCommand(),
       new Commands.LogoutCommand(),
       new Commands.WhoCommand(),
-      new Commands.CommonHelpCommand(),
+      new Commands.HelpCommand(),
     ],
   })
 }

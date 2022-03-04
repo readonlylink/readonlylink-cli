@@ -5,6 +5,7 @@ import { App } from "../../app"
 import { ErrorReporter } from "../../errors/error-reporter"
 import { LocalFileStore } from "../../infra/local-file-store"
 import { Ro } from "../../ro"
+import chunk from "lodash/chunk"
 
 type Args = { directory: string; project: string }
 type Opts = {}
@@ -51,16 +52,47 @@ export class UploadCommand extends Command<Args, Opts> {
 
     try {
       await ro.createProjectIfNeed(username, projectName)
-      await ro.writeAllFiles(username, projectName, files)
+
       console.log({
         username,
         project: projectName,
-        files: Object.keys(files).length,
-        bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
       })
+
+      // await uploadFiles(username, projectName, files)
+      await uploadFilesByChunk(username, projectName, files)
     } catch (error) {
       const reporter = app.create(ErrorReporter)
       reporter.reportErrorAndExit(error)
+    }
+
+    async function uploadFiles(
+      username: string,
+      projectName: string,
+      files: Record<string, string>
+    ): Promise<void> {
+      await ro.writeFiles(username, projectName, files)
+      console.log({
+        files: Object.keys(files).length,
+        bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
+      })
+    }
+
+    async function uploadFilesByChunk(
+      username: string,
+      projectName: string,
+      files: Record<string, string>
+    ): Promise<void> {
+      for (const group of chunk(Object.entries(files), 8)) {
+        await ro.writeFiles(username, projectName, Object.fromEntries(group))
+        for (const [path, text] of group) {
+          console.log({ path, size: text.length })
+        }
+      }
+
+      console.log({
+        files: Object.keys(files).length,
+        bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
+      })
     }
   }
 }

@@ -96,7 +96,7 @@ export class Ro {
     return files
   }
 
-  async writeAllFiles(
+  async writeFiles(
     username: string,
     projectName: string,
     files: Record<string, string>

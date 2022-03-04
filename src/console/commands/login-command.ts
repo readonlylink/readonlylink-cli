@@ -1,8 +1,8 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
-import axios from "axios"
 import { App } from "../../app"
+import { ErrorReporter } from "../../errors/error-reporter"
 import { Ro } from "../../ro"
 
 type Args = { email: string }
@@ -42,11 +42,8 @@ export class LoginCommand extends Command<Args, Opts> {
       const links = await ro.login(argv.email)
       setInterval(() => ro.verify(links), 3000)
     } catch (error) {
-      if (!axios.isAxiosError(error)) throw error
-      const report: Record<string, any> = { message: error.message }
-      if (error.response?.data) report.details = error.response.data
-      console.dir(report, { depth: null })
-      process.exit(1)
+      const reporter = app.create(ErrorReporter)
+      reporter.reportErrorAndExit(error)
     }
   }
 }

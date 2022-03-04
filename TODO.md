@@ -1,2 +1,1 @@
-- handle errors better
 - `UploadCommand`

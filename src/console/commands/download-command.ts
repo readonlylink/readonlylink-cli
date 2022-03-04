@@ -1,10 +1,9 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
-import Path from "path"
-import fs from "fs"
-import { LocalFileStore } from "../../infra/local-file-store"
 import { App } from "../../app"
+import { ErrorReporter } from "../../errors/error-reporter"
+import { LocalFileStore } from "../../infra/local-file-store"
 import { Ro } from "../../ro"
 
 type Args = { project: string; directory?: string }
@@ -42,15 +41,20 @@ export class DownloadCommand extends Command<Args, Opts> {
 
     const ro = app.create(Ro)
 
-    const files = await ro.readAllFiles(username, projectName)
+    try {
+      const files = await ro.readAllFiles(username, projectName)
 
-    const local = new LocalFileStore(argv.directory ?? projectName)
+      const local = new LocalFileStore(argv.directory ?? projectName)
 
-    console.log(`directory: ${local.root}`)
+      console.log(`directory: ${local.root}`)
 
-    for (const [path, text] of Object.entries(files)) {
-      await local.put(path, text)
-      console.log(`- ${path}`)
+      for (const [path, text] of Object.entries(files)) {
+        await local.put(path, text)
+        console.log(`- ${path}`)
+      }
+    } catch (error) {
+      const reporter = app.create(ErrorReporter)
+      reporter.reportErrorAndExit(error)
     }
   }
 }

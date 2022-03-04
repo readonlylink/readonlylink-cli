@@ -9,12 +9,6 @@ export async function buildCommandRunner(): Promise<CommandRunner> {
   return createCommandRunner({
     app: await App.build(),
     defaultCommand: new Commands.HelpCommand(),
-    commands: [
-      new Commands.HelpCommand(),
-      new Commands.LoginCommand(),
-      new Commands.LogoutCommand(),
-      new Commands.WhoCommand(),
-      new Commands.DownloadCommand(),
-    ],
+    commands: Object.values(Commands).map((Command) => new Command()),
   })
 }

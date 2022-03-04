@@ -2,4 +2,5 @@ export { CommonHelpCommand as HelpCommand } from "@enchanterjs/enchanter/lib/com
 export * from "./download-command"
 export * from "./login-command"
 export * from "./logout-command"
+export * from "./upload-command"
 export * from "./who-command"

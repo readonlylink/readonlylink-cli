@@ -1,5 +1,6 @@
 import fs from "fs"
 import Path from "path"
+import readdirp from "readdirp"
 
 export class LocalFileStore {
   constructor(public root: string) {}
@@ -30,5 +31,14 @@ export class LocalFileStore {
 
   async delete(path: string): Promise<void> {
     await fs.promises.rm(this.resolve(path), { force: true })
+  }
+
+  async all(): Promise<Record<string, string>> {
+    const files: Record<string, string> = {}
+    for (const { path } of await readdirp.promise(this.root)) {
+      files[path] = await this.get(path)
+    }
+
+    return files
   }
 }

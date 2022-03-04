@@ -1,1 +1,2 @@
-- `UploadCommand`
+- `DownloadCommand` -- show progress
+- `UploadCommand` -- show progress

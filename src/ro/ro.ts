@@ -90,13 +90,25 @@ export class Ro {
 
     const { data: files } = await axios.get(
       this.api(`/files/${username}/${projectName}`),
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     )
 
     return files
+  }
+
+  async writeAllFiles(
+    username: string,
+    projectName: string,
+    files: Record<string, string>
+  ): Promise<void> {
+    const token = await this.local.get("access-token")
+
+    const { data } = await axios.patch(
+      this.api(`/files/${username}/${projectName}`),
+      { files },
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+
+    console.log(data)
   }
 }

@@ -12,7 +12,7 @@ type Opts = {}
 export class DownloadCommand extends Command<Args, Opts> {
   name = "download"
 
-  description = "Download a project to local machine"
+  description = "Download a project to directory"
 
   args = { project: ty.string(), directory: ty.optional(ty.string()) }
   opts = {}
@@ -31,6 +31,10 @@ export class DownloadCommand extends Command<Args, Opts> {
       `If the directory does not exist, the command will create one.`,
       ``,
       blue(`  ${runner.name} ${this.name} xieyuheng/xieyuheng inner`),
+      ``,
+      `We can omit project name if it is the same as user name.`,
+      ``,
+      blue(`  ${runner.name} ${this.name} xieyuheng inner`),
       ``,
     ].join("\n")
   }

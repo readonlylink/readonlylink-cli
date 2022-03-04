@@ -1,7 +1,7 @@
 import fs from "fs"
+import walk from "ignore-walk"
 import Path from "path"
 import readdirp from "readdirp"
-import walk from "ignore-walk"
 
 export class LocalFileStore {
   constructor(public root: string) {}

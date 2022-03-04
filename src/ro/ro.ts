@@ -82,14 +82,20 @@ export class Ro {
     console.log(username)
   }
 
-  async download(name: string): Promise<Record<string, string>> {
+  async readAllFiles(
+    username: string,
+    projectName: string
+  ): Promise<Record<string, string>> {
     const token = await this.local.get("access-token")
 
-    const { data: files } = await axios.get(this.api(`/files/${name}`), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const { data: files } = await axios.get(
+      this.api(`/files/${username}/${projectName}`),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
 
     return files
   }

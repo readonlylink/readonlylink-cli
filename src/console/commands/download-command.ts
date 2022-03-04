@@ -1,6 +1,9 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
+import Path from "path"
+import fs from "fs"
+import { LocalFileStore } from "../../infra/local-file-store"
 import { App } from "../../app"
 import { Ro } from "../../ro"
 
@@ -34,8 +37,20 @@ export class DownloadCommand extends Command<Args, Opts> {
   }
 
   async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
+    let [username, projectName] = argv.project.split("/")
+    if (!projectName) projectName = username
+
     const ro = app.create(Ro)
-    const files = await ro.download(argv.project)
-    console.log(files)
+
+    const files = await ro.readAllFiles(username, projectName)
+
+    const local = new LocalFileStore(argv.directory ?? projectName)
+
+    console.log(`directory: ${local.root}`)
+
+    for (const [path, text] of Object.entries(files)) {
+      await local.put(path, text)
+      console.log(`- ${path}`)
+    }
   }
 }

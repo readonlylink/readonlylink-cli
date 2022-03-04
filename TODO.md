@@ -1,2 +1,2 @@
-- `DownloadCommand`
+- handle errors better
 - `UploadCommand`

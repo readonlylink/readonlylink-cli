@@ -1,6 +1,7 @@
 import fs from "fs"
 import Path from "path"
 import readdirp from "readdirp"
+import walk from "ignore-walk"
 
 export class LocalFileStore {
   constructor(public root: string) {}
@@ -33,12 +34,32 @@ export class LocalFileStore {
     await fs.promises.rm(this.resolve(path), { force: true })
   }
 
-  async all(): Promise<Record<string, string>> {
+  async all(
+    opts: { includeAll?: boolean } = {}
+  ): Promise<Record<string, string>> {
+    const paths = opts.includeAll ? await this.allKeys() : await this.keys()
+
     const files: Record<string, string> = {}
-    for (const { path } of await readdirp.promise(this.root)) {
-      files[path] = await this.get(path)
+
+    for (const path of paths) {
+      if (!path.startsWith(".git/")) {
+        files[path] = await this.get(path)
+      }
     }
 
     return files
+  }
+
+  async allKeys(): Promise<Array<string>> {
+    const entries = await readdirp.promise(this.root)
+    return entries.map(({ path }) => path)
+  }
+
+  async keys(): Promise<Array<string>> {
+    return walk.sync({
+      path: this.root,
+      ignoreFiles: [".gitignore"],
+      includeEmpty: true,
+    })
   }
 }

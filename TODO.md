@@ -1,2 +1,2 @@
-- `DownloadCommand` -- show progress
-- `UploadCommand` -- show progress
+- `PackageDownloadCommand` -- show progress
+- `PackageUploadCommand` -- show progress

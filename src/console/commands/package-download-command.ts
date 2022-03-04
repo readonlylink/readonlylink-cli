@@ -9,8 +9,8 @@ import { Ro } from "../../ro"
 type Args = { project: string; directory?: string }
 type Opts = {}
 
-export class DownloadCommand extends Command<Args, Opts> {
-  name = "download"
+export class PackageDownloadCommand extends Command<Args, Opts> {
+  name = "package-download"
 
   description = "Download a project to directory"
 

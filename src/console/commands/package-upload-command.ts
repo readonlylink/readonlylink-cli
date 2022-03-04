@@ -1,17 +1,17 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
+import chunk from "lodash/chunk"
 import { App } from "../../app"
 import { ErrorReporter } from "../../errors/error-reporter"
 import { LocalFileStore } from "../../infra/local-file-store"
 import { Ro } from "../../ro"
-import chunk from "lodash/chunk"
 
 type Args = { directory: string; project: string }
 type Opts = {}
 
-export class UploadCommand extends Command<Args, Opts> {
-  name = "upload"
+export class PackageUploadCommand extends Command<Args, Opts> {
+  name = "package-upload"
 
   description = "Upload a directory as project"
 

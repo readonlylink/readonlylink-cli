@@ -103,12 +103,21 @@ export class Ro {
   ): Promise<void> {
     const token = await this.local.get("access-token")
 
-    const { data } = await axios.patch(
+    await axios.patch(
       this.api(`/files/${username}/${projectName}`),
       { files },
       { headers: { Authorization: `Bearer ${token}` } }
     )
+  }
 
-    console.log(data)
+  async createProjectIfNeed(
+    username: string,
+    projectName: string
+  ): Promise<void> {
+    const token = await this.local.get("access-token")
+
+    await axios.patch(this.api(`/projects/${username}/${projectName}`), "", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
   }
 }

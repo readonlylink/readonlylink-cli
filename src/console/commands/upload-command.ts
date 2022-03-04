@@ -46,6 +46,7 @@ export class UploadCommand extends Command<Args, Opts> {
     const files = await local.all()
 
     try {
+      await ro.createProjectIfNeed(username, projectName)
       await ro.writeAllFiles(username, projectName, files)
       console.log({
         username,

@@ -24,7 +24,8 @@ export class UploadCommand extends Command<Args, Opts> {
     return [
       `The ${blue(this.name)} command upload a directory as project.`,
       ``,
-      `Note that, it knows about the ${blue(".gitignore")} file.`,
+      `Note that, it knows about the ${blue(".gitignore")} and ${blue(".roignore")} file,`,
+      `and the ${blue(".git/")} directory will also be ignored.`,
       ``,
       blue(`  ${runner.name} ${this.name} ./cicada-monologues xieyuheng/cicada-monologues`),
       blue(`  ${runner.name} ${this.name} ./inner xieyuheng/xieyuheng`),
@@ -43,7 +44,10 @@ export class UploadCommand extends Command<Args, Opts> {
     const ro = app.create(Ro)
 
     const local = new LocalFileStore(argv.directory)
-    const files = await local.all()
+    const files = await local.all({
+      ignorePrefixs: [".git/"],
+      ignoreFiles: [".gitignore", ".roignore"],
+    })
 
     try {
       await ro.createProjectIfNeed(username, projectName)

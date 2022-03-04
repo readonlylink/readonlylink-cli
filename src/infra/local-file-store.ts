@@ -45,9 +45,13 @@ export class LocalFileStore {
     const files: Record<string, string> = {}
 
     for (const path of await this.keys(opts)) {
-      if (opts.ignorePrefixs.some((prefix) => path.startsWith(prefix))) break
-      if (opts.ignorePrefixs.some((prefix) => path.includes("/" + prefix))) break
-      files[path] = await this.get(path)
+      if (
+        !opts.ignorePrefixs.some(
+          (prefix) => path.startsWith(prefix) || path.includes("/" + prefix)
+        )
+      ) {
+        files[path] = await this.get(path)
+      }
     }
 
     return files

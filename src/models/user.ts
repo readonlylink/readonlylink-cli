@@ -7,11 +7,22 @@ import { LocalFileStore } from "../infra/local-file-store"
 export class User {
   username: string
   config: Config
-  local = new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 
   constructor(opts: { username: string; config: Config }) {
     this.username = opts.username
     this.config = opts.config
+  }
+
+  get local(): LocalFileStore {
+    return new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
+
+    // return new LocalFileStore(
+    //   Path.resolve(
+    //     os.homedir(),
+    //     ".readonlylink/users",
+    //     this.username
+    //   )
+    // )
   }
 
   api(path: string): string {

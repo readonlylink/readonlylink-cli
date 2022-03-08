@@ -40,7 +40,7 @@ export class LoginCommand extends Command<Args, Opts> {
 
     try {
       const links = await ro.login(argv.email)
-      setInterval(() => ro.verify(links), 3000)
+      setInterval(() => ro.verify(argv.email, links), 3000)
     } catch (error) {
       const reporter = app.create(ErrorReporter)
       reporter.reportErrorAndExit(error)

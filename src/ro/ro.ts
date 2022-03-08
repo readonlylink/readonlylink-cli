@@ -39,7 +39,10 @@ export class Ro {
     return links
   }
 
-  async verify(links: { verify_for_token: string }): Promise<void> {
+  async verify(
+    email: string,
+    links: { verify_for_token: string }
+  ): Promise<void> {
     try {
       const { data } = await axios.get(links.verify_for_token)
 
@@ -83,7 +86,7 @@ export class Ro {
     console.log(username)
   }
 
-  createUser(username: string): User {
+  getUserOrFail(username: string): User {
     return new User({ username, config: this.config })
   }
 }

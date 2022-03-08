@@ -6,6 +6,14 @@ import { LocalFileStore } from "../infra/local-file-store"
 export class User {
   constructor(public username: string) {}
 
+  api(path: string): string {
+    return config.base_url + path
+  }
+
+  static createLocal(username: string): LocalFileStore {
+    return new LocalFileStore(Path.resolve(config.home_dir, "users", username))
+  }
+
   static async getOrFail(username: string): Promise<User> {
     const local = this.createLocal(username)
     if (!(await local.hasDirectory(""))) {
@@ -25,20 +33,12 @@ export class User {
     await local.put("email", opts.email)
   }
 
-  static createLocal(username: string): LocalFileStore {
-    return new LocalFileStore(Path.resolve(config.home_dir, "users", username))
-  }
-
   async logout(): Promise<void> {
     await this.local.delete("")
   }
 
   get local(): LocalFileStore {
     return User.createLocal(this.username)
-  }
-
-  api(path: string): string {
-    return config.base_url + path
   }
 
   async readAllFiles(projectName: string): Promise<Record<string, string>> {

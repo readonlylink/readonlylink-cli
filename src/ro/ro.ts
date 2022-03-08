@@ -54,7 +54,7 @@ export class Ro {
     })
   }
 
-  async getOrFail(username: string): Promise<User> {
+  async getUserOrFail(username: string): Promise<User> {
     return await User.getOrFail(username)
   }
 }

@@ -55,6 +55,23 @@ export class Ro {
   }
 
   async getUserOrFail(username: string): Promise<User> {
-    return await User.getOrFail(username)
+    try {
+      return await User.getOrFail(username)
+    } catch (error) {
+      if (!(error instanceof Error)) throw error
+
+      console.dir(
+        {
+          message: "Fail to get user.",
+          username,
+          error: {
+            message: error.message,
+          },
+        },
+        { depth: null }
+      )
+
+      process.exit(1)
+    }
   }
 }

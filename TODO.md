@@ -1,5 +1,3 @@
-- fix `getOrFail`
-
 - `user-list` command
 
 - restore `isLoggedIn` check

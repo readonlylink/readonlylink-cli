@@ -17,7 +17,7 @@ export class User {
   static async getOrFail(username: string): Promise<User> {
     const local = this.createLocal(username)
     if (!(await local.hasDirectory(""))) {
-      throw new Error(`Unknown user: ${username}`)
+      throw new Error(`Unknown username: ${username}`)
     }
 
     return new User(username)
@@ -34,7 +34,7 @@ export class User {
   }
 
   async logout(): Promise<void> {
-    await this.local.delete("")
+    await this.local.deleteAll()
   }
 
   get local(): LocalFileStore {

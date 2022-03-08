@@ -50,6 +50,10 @@ export class LocalFileStore {
     })
   }
 
+  async deleteAll(): Promise<void> {
+    await this.delete("")
+  }
+
   async all(
     opts: {
       ignorePrefixs: Array<string>

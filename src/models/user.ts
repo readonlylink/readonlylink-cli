@@ -1,28 +1,18 @@
 import axios from "axios"
-import os from "os"
 import Path from "path"
-import { Config } from "../config"
+import { config } from "../config"
 import { LocalFileStore } from "../infra/local-file-store"
 
 export class User {
-  username: string
-  config: Config
+  constructor(public username: string) {}
 
-  constructor(opts: { username: string; config: Config }) {
-    this.username = opts.username
-    this.config = opts.config
-  }
-
-  static async getOrFail(opts: {
-    username: string
-    config: Config
-  }): Promise<User> {
-    const local = this.createLocal(opts.username)
+  static async getOrFail(username: string): Promise<User> {
+    const local = this.createLocal(username)
     if (!(await local.hasDirectory(""))) {
-      throw new Error(`Unknown user: ${opts.username}`)
+      throw new Error(`Unknown user: ${username}`)
     }
 
-    return new User(opts)
+    return new User(username)
   }
 
   static async login(opts: {
@@ -36,13 +26,11 @@ export class User {
   }
 
   static createLocal(username: string): LocalFileStore {
-    return new LocalFileStore(
-      Path.resolve(os.homedir(), ".readonlylink/users", username)
-    )
+    return new LocalFileStore(Path.resolve(config.home_dir, "users", username))
   }
 
   async logout(): Promise<void> {
-    await this.local.delete()
+    await this.local.delete("")
   }
 
   get local(): LocalFileStore {
@@ -50,7 +38,7 @@ export class User {
   }
 
   api(path: string): string {
-    return this.config.base_url + path
+    return config.base_url + path
   }
 
   async readAllFiles(projectName: string): Promise<Record<string, string>> {

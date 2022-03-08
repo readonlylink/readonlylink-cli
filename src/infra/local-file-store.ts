@@ -43,7 +43,7 @@ export class LocalFileStore {
     await fs.promises.writeFile(this.resolve(path), text)
   }
 
-  async delete(path: string = ""): Promise<void> {
+  async delete(path: string): Promise<void> {
     await fs.promises.rm(this.resolve(path), {
       recursive: true,
       force: true,

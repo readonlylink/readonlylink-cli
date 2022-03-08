@@ -1,12 +1,10 @@
 import axios from "axios"
-import { Config } from "../config"
+import { config } from "../config"
 import { User } from "../models/user"
 
 export class Ro {
-  constructor(public config: Config) {}
-
   api(path: string): string {
-    return this.config.base_url + path
+    return config.base_url + path
   }
 
   async login(email: string): Promise<{ verify_for_token: string }> {
@@ -46,7 +44,7 @@ export class Ro {
   }
 
   async logout(username: string): Promise<void> {
-    const user = await User.getOrFail({ username, config: this.config })
+    const user = await User.getOrFail(username)
 
     await user.logout()
 
@@ -57,6 +55,6 @@ export class Ro {
   }
 
   async getOrFail(username: string): Promise<User> {
-    return await User.getOrFail({ username, config: this.config })
+    return await User.getOrFail(username)
   }
 }

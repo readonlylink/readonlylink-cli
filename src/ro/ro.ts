@@ -86,29 +86,4 @@ export class Ro {
   createUser(username: string): User {
     return new User({ username, config: this.config })
   }
-
-  async writeFiles(
-    username: string,
-    projectName: string,
-    files: Record<string, string>
-  ): Promise<void> {
-    const token = await this.local.get("access-token")
-
-    await axios.patch(
-      this.api(`/files/${username}/${projectName}`),
-      { files },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-  }
-
-  async createProjectIfNeed(
-    username: string,
-    projectName: string
-  ): Promise<void> {
-    const token = await this.local.get("access-token")
-
-    await axios.patch(this.api(`/projects/${username}/${projectName}`), "", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-  }
 }

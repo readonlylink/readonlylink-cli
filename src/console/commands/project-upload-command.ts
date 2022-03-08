@@ -43,6 +43,7 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     if (!projectName) projectName = username
 
     const ro = app.create(Ro)
+    const user = ro.createUser(username)
 
     const local = new LocalFileStore(argv.directory)
     const files = await local.all({
@@ -51,7 +52,7 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     })
 
     try {
-      await ro.createProjectIfNeed(username, projectName)
+      await user.createProjectIfNeed(projectName)
 
       console.log({
         username,
@@ -59,18 +60,17 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
       })
 
       // await uploadFiles(username, projectName, files)
-      await uploadFilesByChunk(username, projectName, files)
+      await uploadFilesByChunk(projectName, files)
     } catch (error) {
       const reporter = app.create(ErrorReporter)
       reporter.reportErrorAndExit(error)
     }
 
     async function uploadFiles(
-      username: string,
       projectName: string,
       files: Record<string, string>
     ): Promise<void> {
-      await ro.writeFiles(username, projectName, files)
+      await user.writeFiles(projectName, files)
       console.log({
         files: Object.keys(files).length,
         bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
@@ -78,12 +78,11 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     }
 
     async function uploadFilesByChunk(
-      username: string,
       projectName: string,
       files: Record<string, string>
     ): Promise<void> {
       for (const group of chunk(Object.entries(files), 8)) {
-        await ro.writeFiles(username, projectName, Object.fromEntries(group))
+        await user.writeFiles(projectName, Object.fromEntries(group))
         for (const [path, text] of group) {
           console.log({ path, size: text.length })
         }

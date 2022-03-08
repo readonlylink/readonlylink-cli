@@ -46,7 +46,7 @@ export class Ro {
   async logout(username: string): Promise<void> {
     const user = await User.getOrFail(username)
 
-    await user.logout()
+    await user.delete()
 
     console.log({
       message: "Logout successful.",

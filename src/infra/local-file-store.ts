@@ -65,7 +65,7 @@ export class LocalFileStore {
   ): Promise<Record<string, string>> {
     const files: Record<string, string> = {}
 
-    for (const path of await this.keys(opts)) {
+    for (const path of await this.allFiles(opts)) {
       if (
         !opts.ignorePrefixs.some(
           (prefix) => path.startsWith(prefix) || path.includes("/" + prefix)
@@ -78,7 +78,7 @@ export class LocalFileStore {
     return files
   }
 
-  async keys(
+  async allFiles(
     opts: {
       ignorePrefixs: Array<string>
       ignoreFiles: Array<string>

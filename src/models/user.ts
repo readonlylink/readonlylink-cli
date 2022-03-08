@@ -14,14 +14,32 @@ export class User {
     return new LocalFileStore(Path.resolve(config.home_dir, "users", username))
   }
 
-  static async getOrFail(username: string): Promise<User> {
+  static async get(username: string): Promise<User | undefined> {
     const local = this.createLocal(username)
     if (!(await local.hasDirectory(""))) {
-      throw new Error(`Unknown username: ${username}`)
+      return
     }
 
     return new User(username)
   }
+
+  static async getOrFail(username: string): Promise<User> {
+    const user = await this.get(username)
+    if (user === undefined) {
+      throw new Error(`Unknown username: ${username}`)
+    }
+
+    return user
+  }
+
+  // static async all(): Promise<Array<User>> {
+  //   const local = this.createLocal("")
+  //   // local.keys
+  // }
+
+  // static async isLoggedIn(email: string): Promise<boolean> {
+
+  // }
 
   static async create(opts: {
     username: string
@@ -34,7 +52,7 @@ export class User {
     return new User(opts.username)
   }
 
-  async logout(): Promise<void> {
+  async delete(): Promise<void> {
     await this.local.deleteAll()
   }
 

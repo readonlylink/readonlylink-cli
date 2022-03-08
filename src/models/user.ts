@@ -32,6 +32,28 @@ export class User {
     return user
   }
 
+
+  static async getOrExit(username: string): Promise<User> {
+    try {
+      return await this.getOrFail(username)
+    } catch (error) {
+      if (!(error instanceof Error)) throw error
+
+      console.dir(
+        {
+          message: "Fail to get user.",
+          username,
+          error: {
+            message: error.message,
+          },
+        },
+        { depth: null }
+      )
+
+      process.exit(1)
+    }
+  }
+
   static async all(): Promise<Array<User>> {
     const local = this.createLocal("")
     const directories = await local.directories("")

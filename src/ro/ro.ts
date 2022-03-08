@@ -7,6 +7,14 @@ export class Ro {
     return config.base_url + path
   }
 
+  async isUserLoggedIn(email: string): Promise<boolean> {
+    return await User.isLoggedIn(email)
+  }
+
+  async getUserOrExit(username: string): Promise<User> {
+    return await User.getOrExit(username)
+  }
+
   async login(email: string): Promise<{ verify_for_token: string }> {
     const response = await axios.post(this.api("/login"), { email })
 
@@ -44,7 +52,7 @@ export class Ro {
   }
 
   async logout(username: string): Promise<void> {
-    const user = await User.getOrFail(username)
+    const user = await User.getOrExit(username)
 
     await user.delete()
 
@@ -52,30 +60,5 @@ export class Ro {
       message: "Logout successful.",
       username,
     })
-  }
-
-  async isUserLoggedIn(email: string): Promise<boolean> {
-    return await User.isLoggedIn(email)
-  }
-
-  async getUserOrFail(username: string): Promise<User> {
-    try {
-      return await User.getOrFail(username)
-    } catch (error) {
-      if (!(error instanceof Error)) throw error
-
-      console.dir(
-        {
-          message: "Fail to get user.",
-          username,
-          error: {
-            message: error.message,
-          },
-        },
-        { depth: null }
-      )
-
-      process.exit(1)
-    }
   }
 }

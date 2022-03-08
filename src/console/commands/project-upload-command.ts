@@ -43,7 +43,7 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     if (!projectName) projectName = username
 
     const ro = app.create(Ro)
-    const user = await ro.getUserOrFail(username)
+    const user = await ro.getUserOrExit(username)
 
     const local = new LocalFileStore(argv.directory)
     const files = await local.all({

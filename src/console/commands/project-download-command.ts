@@ -44,7 +44,7 @@ export class ProjectDownloadCommand extends Command<Args, Opts> {
     if (!projectName) projectName = username
 
     const ro = app.create(Ro)
-    const user = await ro.getUserOrFail(username)
+    const user = await ro.getUserOrExit(username)
 
     try {
       const files = await user.readAllFiles(projectName)

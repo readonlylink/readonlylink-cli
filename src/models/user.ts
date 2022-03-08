@@ -13,7 +13,12 @@ export class User {
     this.config = opts.config
   }
 
-  static getUserOrFail(opts: { username: string; config: Config }): User {
+  static getOrFail(opts: { username: string; config: Config }): User {
+    const local = this.createLocal(opts.username)
+    if (!local.has(opts.username)) {
+      throw new Error(`Unknown user: ${opts.username}`)
+    }
+
     return new User(opts)
   }
 
@@ -24,20 +29,17 @@ export class User {
   }): Promise<void> {
     const local = this.createLocal(opts.username)
     await local.put("access-token", opts.token)
-    await local.put("username", opts.username)
     await local.put("email", opts.email)
   }
 
   static createLocal(username: string): LocalFileStore {
-    return new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
+    return new LocalFileStore(
+      Path.resolve(os.homedir(), ".readonlylink/users", username)
+    )
+  }
 
-    // return new LocalFileStore(
-    //   Path.resolve(
-    //     os.homedir(),
-    //     ".readonlylink/users",
-    //     username
-    //   )
-    // )
+  async logout(): Promise<void> {
+    await this.local.delete(this.username)
   }
 
   get local(): LocalFileStore {

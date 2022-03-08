@@ -1,17 +1,18 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
+import ty from "@xieyuheng/ty"
 import { App } from "../../app"
 import { Ro } from "../../ro"
 
-type Args = {}
+type Args = { username: string }
 type Opts = {}
 
 export class LogoutCommand extends Command<Args, Opts> {
   name = "logout"
 
-  description = "Logout the current logged-in user"
+  description = "Logout a given user"
 
-  args = {}
+  args = { username: ty.string() }
   opts = {}
 
   // prettier-ignore
@@ -19,15 +20,15 @@ export class LogoutCommand extends Command<Args, Opts> {
     const { blue } = this.colors
 
     return [
-      `The ${blue(this.name)} command logs out the current logged-in user.`,
+      `The ${blue(this.name)} command logs out a given user.`,
       ``,
-      blue(`  ${runner.name} ${this.name}`),
+      blue(`  ${runner.name} ${this.name} <username>`),
       ``,
     ].join("\n")
   }
 
   async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
     const ro = app.create(Ro)
-    await ro.logout()
+    await ro.logout(argv.username)
   }
 }

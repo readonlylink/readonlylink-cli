@@ -62,16 +62,9 @@ export class Ro {
     }
   }
 
-  async logout(): Promise<void> {
-    if (!(await this.local.has("username"))) {
-      console.log({ message: "Nobody is logged-in yet." })
-      return
-    }
-
-    const username = await this.local.get("username")
-
-    await this.local.delete("username")
-    await this.local.delete("access-token")
+  async logout(username: string): Promise<void> {
+    const user = User.getOrFail({ username, config: this.config })
+    await user.logout()
 
     console.log({
       message: "Logout successful.",
@@ -79,15 +72,7 @@ export class Ro {
     })
   }
 
-  async who(): Promise<void> {
-    if (!(await this.local.has("username"))) return
-
-    const username = await this.local.get("username")
-
-    console.log(username)
-  }
-
-  getUserOrFail(username: string): User {
-    return User.getUserOrFail({ username, config: this.config })
+  getOrFail(username: string): User {
+    return User.getOrFail({ username, config: this.config })
   }
 }

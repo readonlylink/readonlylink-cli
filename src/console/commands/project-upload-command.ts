@@ -59,16 +59,6 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
         project: projectName,
       })
 
-      await uploadFilesByChunk(projectName, files)
-    } catch (error) {
-      const reporter = app.create(ErrorReporter)
-      reporter.reportErrorAndExit(error)
-    }
-
-    async function uploadFilesByChunk(
-      projectName: string,
-      files: Record<string, string>
-    ): Promise<void> {
       for (const group of chunk(Object.entries(files), 8)) {
         await user.writeFiles(projectName, Object.fromEntries(group))
         for (const [path, text] of group) {
@@ -80,6 +70,9 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
         files: Object.keys(files).length,
         bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
       })
+    } catch (error) {
+      const reporter = app.create(ErrorReporter)
+      reporter.reportErrorAndExit(error)
     }
   }
 }

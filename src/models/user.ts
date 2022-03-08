@@ -32,7 +32,6 @@ export class User {
     return user
   }
 
-
   static async getOrExit(username: string): Promise<User> {
     try {
       return await this.getOrFail(username)

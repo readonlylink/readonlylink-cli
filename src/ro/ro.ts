@@ -1,6 +1,4 @@
 import axios from "axios"
-import os from "os"
-import Path from "path"
 import { Config } from "../config"
 import { User } from "../models/user"
 
@@ -48,7 +46,7 @@ export class Ro {
   }
 
   async logout(username: string): Promise<void> {
-    const user = User.getOrFail({ username, config: this.config })
+    const user = await User.getOrFail({ username, config: this.config })
 
     await user.logout()
 
@@ -58,7 +56,7 @@ export class Ro {
     })
   }
 
-  getOrFail(username: string): User {
-    return User.getOrFail({ username, config: this.config })
+  async getOrFail(username: string): Promise<User> {
+    return await User.getOrFail({ username, config: this.config })
   }
 }

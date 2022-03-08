@@ -13,9 +13,12 @@ export class User {
     this.config = opts.config
   }
 
-  static getOrFail(opts: { username: string; config: Config }): User {
+  static async getOrFail(opts: {
+    username: string
+    config: Config
+  }): Promise<User> {
     const local = this.createLocal(opts.username)
-    if (!local.has(opts.username)) {
+    if (!(await local.hasDirectory(""))) {
       throw new Error(`Unknown user: ${opts.username}`)
     }
 
@@ -39,7 +42,7 @@ export class User {
   }
 
   async logout(): Promise<void> {
-    await this.local.delete(this.username)
+    await this.local.delete()
   }
 
   get local(): LocalFileStore {

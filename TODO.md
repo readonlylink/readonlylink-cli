@@ -1,5 +1,3 @@
-- each user has his/her own dir
-
 - fix `getOrFail`
 
 - `user-list` command

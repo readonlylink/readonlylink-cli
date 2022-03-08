@@ -9,7 +9,7 @@ export class LocalFileStore {
     return `${this.root}/${path}`
   }
 
-  async has(path: string): Promise<boolean> {
+  async hasFile(path: string): Promise<boolean> {
     try {
       await fs.promises.access(this.resolve(path))
       const stats = await fs.promises.lstat(this.resolve(path))
@@ -17,6 +17,20 @@ export class LocalFileStore {
     } catch (_error) {
       return false
     }
+  }
+
+  async hasDirectory(path: string): Promise<boolean> {
+    try {
+      await fs.promises.access(this.resolve(path))
+      const stats = await fs.promises.lstat(this.resolve(path))
+      return stats.isDirectory()
+    } catch (_error) {
+      return false
+    }
+  }
+
+  async has(path: string): Promise<boolean> {
+    return this.hasFile(path) || this.hasDirectory(path)
   }
 
   async get(path: string): Promise<string> {
@@ -29,8 +43,11 @@ export class LocalFileStore {
     await fs.promises.writeFile(this.resolve(path), text)
   }
 
-  async delete(path: string): Promise<void> {
-    await fs.promises.rm(this.resolve(path), { force: true })
+  async delete(path: string = ""): Promise<void> {
+    await fs.promises.rm(this.resolve(path), {
+      recursive: true,
+      force: true,
+    })
   }
 
   async all(

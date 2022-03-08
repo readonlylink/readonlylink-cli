@@ -10,8 +10,8 @@ import { Ro } from "../../ro"
 type Args = { directory: string; project: string }
 type Opts = {}
 
-export class PackageUploadCommand extends Command<Args, Opts> {
-  name = "package-upload"
+export class ProjectUploadCommand extends Command<Args, Opts> {
+  name = "project-upload"
 
   description = "Upload a directory as project"
 

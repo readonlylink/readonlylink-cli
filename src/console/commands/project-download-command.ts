@@ -9,8 +9,8 @@ import { Ro } from "../../ro"
 type Args = { project: string; directory?: string }
 type Opts = {}
 
-export class PackageDownloadCommand extends Command<Args, Opts> {
-  name = "package-download"
+export class ProjectDownloadCommand extends Command<Args, Opts> {
+  name = "project-download"
 
   description = "Download a project to directory"
 
@@ -44,9 +44,10 @@ export class PackageDownloadCommand extends Command<Args, Opts> {
     if (!projectName) projectName = username
 
     const ro = app.create(Ro)
+    const user = ro.createUser(username)
 
     try {
-      const files = await ro.readAllFiles(username, projectName)
+      const files = await user.readAllFiles(projectName)
 
       const local = new LocalFileStore(argv.directory ?? projectName)
 

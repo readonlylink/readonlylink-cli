@@ -3,6 +3,7 @@ import os from "os"
 import Path from "path"
 import { Config } from "../config"
 import { LocalFileStore } from "../infra/local-file-store"
+import { User } from "../models/user"
 
 export class Ro {
   constructor(public config: Config) {}
@@ -82,18 +83,8 @@ export class Ro {
     console.log(username)
   }
 
-  async readAllFiles(
-    username: string,
-    projectName: string
-  ): Promise<Record<string, string>> {
-    const token = await this.local.get("access-token")
-
-    const { data: files } = await axios.get(
-      this.api(`/files/${username}/${projectName}`),
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-
-    return files
+  createUser(username: string): User {
+    return new User({ username, config: this.config })
   }
 
   async writeFiles(

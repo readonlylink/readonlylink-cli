@@ -34,6 +34,15 @@ export class LoginCommand extends Command<Args, Opts> {
   async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
     const ro = app.create(Ro)
 
+    if ((await ro.isUserLoggedIn(argv.email)) && !argv.force) {
+      console.log({
+        message: "Already logged-in. Please use --force to login again.",
+        suggested_command: `ro login ${argv.email} --force`,
+      })
+
+      process.exit(1)
+    }
+
     try {
       const links = await ro.login(argv.email)
       setInterval(() => ro.verify(argv.email, links), 3000)

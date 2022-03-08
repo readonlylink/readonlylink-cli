@@ -1,5 +1,3 @@
-- restore `isLoggedIn` check
-
 - `user-list` command
 
 - `FileDownloadCommand`

@@ -59,22 +59,10 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
         project: projectName,
       })
 
-      // await uploadFiles(username, projectName, files)
       await uploadFilesByChunk(projectName, files)
     } catch (error) {
       const reporter = app.create(ErrorReporter)
       reporter.reportErrorAndExit(error)
-    }
-
-    async function uploadFiles(
-      projectName: string,
-      files: Record<string, string>
-    ): Promise<void> {
-      await user.writeFiles(projectName, files)
-      console.log({
-        files: Object.keys(files).length,
-        bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
-      })
     }
 
     async function uploadFilesByChunk(

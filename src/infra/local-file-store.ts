@@ -78,6 +78,10 @@ export class LocalFileStore {
     return files
   }
 
+  async directories(path: string): Promise<Array<string>> {
+    return await fs.promises.readdir(this.resolve(path))
+  }
+
   async allFiles(
     opts: {
       ignorePrefixs: Array<string>
@@ -90,7 +94,6 @@ export class LocalFileStore {
     return walk.sync({
       path: this.root,
       ignoreFiles: opts.ignoreFiles,
-      includeEmpty: true,
     })
   }
 }

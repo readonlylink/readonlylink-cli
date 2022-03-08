@@ -54,6 +54,10 @@ export class Ro {
     })
   }
 
+  async isUserLoggedIn(email: string): Promise<boolean> {
+    return await User.isLoggedIn(email)
+  }
+
   async getUserOrFail(username: string): Promise<User> {
     try {
       return await User.getOrFail(username)

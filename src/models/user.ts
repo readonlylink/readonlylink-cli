@@ -32,14 +32,24 @@ export class User {
     return user
   }
 
-  // static async all(): Promise<Array<User>> {
-  //   const local = this.createLocal("")
-  //   // local.keys
-  // }
+  static async all(): Promise<Array<User>> {
+    const local = this.createLocal("")
+    const directories = await local.directories("")
 
-  // static async isLoggedIn(email: string): Promise<boolean> {
+    return await Promise.all(
+      directories.map((directory) => this.getOrFail(directory))
+    )
+  }
 
-  // }
+  static async isLoggedIn(email: string): Promise<boolean> {
+    for (const user of await this.all()) {
+      if ((await user.local.get("email")) === email) {
+        return true
+      }
+    }
+
+    return false
+  }
 
   static async create(opts: {
     username: string

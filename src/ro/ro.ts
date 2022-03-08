@@ -7,10 +7,14 @@ export class Ro {
     return config.base_url + path
   }
 
+  async allUsers(): Promise<Array<User>> {
+    return await User.all()
+  }
+
   async isUserLoggedIn(email: string): Promise<boolean> {
     return await User.isLoggedIn(email)
   }
-
+  
   async getUserOrExit(username: string): Promise<User> {
     return await User.getOrExit(username)
   }

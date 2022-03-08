@@ -1,5 +1,3 @@
-- `user-list` command
-
 - `FileDownloadCommand`
 - `FileUploadCommand`
 

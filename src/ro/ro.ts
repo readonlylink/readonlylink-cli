@@ -14,18 +14,6 @@ export class Ro {
     return this.config.base_url + path
   }
 
-  async isLoggedIn(email: string): Promise<boolean> {
-    if (!(await this.local.has("username"))) return false
-
-    console.log({
-      message: "Already logged-in. Please use --force to login again.",
-      suggested_command: `ro login ${email} --force`,
-      username: await this.local.get("username"),
-    })
-
-    return true
-  }
-
   async login(email: string): Promise<{ verify_for_token: string }> {
     const response = await axios.post(this.api("/login"), { email })
 

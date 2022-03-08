@@ -34,10 +34,6 @@ export class LoginCommand extends Command<Args, Opts> {
   async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
     const ro = app.create(Ro)
 
-    if (!argv.force) {
-      if (await ro.isLoggedIn(argv.email)) process.exit(1)
-    }
-
     try {
       const links = await ro.login(argv.email)
       setInterval(() => ro.verify(argv.email, links), 3000)

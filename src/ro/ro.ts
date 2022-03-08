@@ -44,14 +44,15 @@ export class Ro {
     links: { verify_for_token: string }
   ): Promise<void> {
     try {
-      const { data } = await axios.get(links.verify_for_token)
+      const {
+        data: { username, token },
+      } = await axios.get(links.verify_for_token)
 
-      await this.local.put("access-token", data.token)
-      await this.local.put("username", data.username)
+      await User.login({ username, email, token })
 
       console.log({
         message: "Login success, information saved in ~/.readonlylink",
-        username: data.username,
+        username,
       })
 
       process.exit(0)

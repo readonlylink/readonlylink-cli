@@ -17,16 +17,31 @@ export class User {
     return new User(opts)
   }
 
-  get local(): LocalFileStore {
+  static async login(opts: {
+    username: string
+    email: string
+    token: string
+  }): Promise<void> {
+    const local = this.createLocal(opts.username)
+    await local.put("access-token", opts.token)
+    await local.put("username", opts.username)
+    await local.put("email", opts.email)
+  }
+
+  static createLocal(username: string): LocalFileStore {
     return new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 
     // return new LocalFileStore(
     //   Path.resolve(
     //     os.homedir(),
     //     ".readonlylink/users",
-    //     this.username
+    //     username
     //   )
     // )
+  }
+
+  get local(): LocalFileStore {
+    return User.createLocal(this.username)
   }
 
   api(path: string): string {

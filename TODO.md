@@ -1,9 +1,12 @@
-- `ro.verify` dispatch to `User.login`
+- `ro.logout` dispatch to `User.logout`
+
+- remove `local` from `ro` -- let `User` model handle data, `ro` is just a controller
 
 - each user has his/her own dir
 
 - fix `getUserOrFail`
 
+- `user-list` command
 
 - be able to login multiple accounts -- user `$RO_DIR/users`
 

@@ -1,5 +1,3 @@
-- remove `local` from `ro` -- let `User` model handle data, `ro` is just a controller
-
 - each user has his/her own dir
 
 - fix `getOrFail`

@@ -2,13 +2,10 @@ import axios from "axios"
 import os from "os"
 import Path from "path"
 import { Config } from "../config"
-import { LocalFileStore } from "../infra/local-file-store"
 import { User } from "../models/user"
 
 export class Ro {
   constructor(public config: Config) {}
-
-  local = new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 
   api(path: string): string {
     return this.config.base_url + path
@@ -52,6 +49,7 @@ export class Ro {
 
   async logout(username: string): Promise<void> {
     const user = User.getOrFail({ username, config: this.config })
+
     await user.logout()
 
     console.log({

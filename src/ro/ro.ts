@@ -87,6 +87,6 @@ export class Ro {
   }
 
   getUserOrFail(username: string): User {
-    return new User({ username, config: this.config })
+    return User.getUserOrFail({ username, config: this.config })
   }
 }

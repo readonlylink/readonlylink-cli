@@ -13,6 +13,10 @@ export class User {
     this.config = opts.config
   }
 
+  static getUserOrFail(opts: { username: string; config: Config }): User {
+    return new User(opts)
+  }
+
   get local(): LocalFileStore {
     return new LocalFileStore(Path.resolve(os.homedir(), ".readonlylink"))
 

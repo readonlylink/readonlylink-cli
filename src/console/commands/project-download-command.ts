@@ -47,16 +47,27 @@ export class ProjectDownloadCommand extends Command<Args, Opts> {
     const user = await ro.getUserOrExit(username)
 
     try {
-      const files = await user.readAllFiles(projectName)
-
       const local = new LocalFileStore(argv.directory ?? projectName)
 
-      console.log(`directory: ${local.root}`)
+      console.log({
+        message: "Project downloading ...",
+        username,
+        project: projectName,
+        directory: local.root,
+      })
 
-      for (const [path, text] of Object.entries(files)) {
+      const files = await user.readAllFiles(projectName)
+      const entries = Object.entries(files)
+
+      for (const [path, text] of entries) {
         await local.put(path, text)
-        console.log(`- ${path}`)
       }
+
+      console.log({
+        message: "Project downloaded.",
+        files: entries.length,
+        bytes: entries.reduce((sum, [path, file]) => sum + file.length, 0),
+      })
     } catch (error) {
       const reporter = app.create(ErrorReporter)
       reporter.reportErrorAndExit(error)

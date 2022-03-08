@@ -14,7 +14,7 @@ export class Ro {
   async isUserLoggedIn(email: string): Promise<boolean> {
     return await User.isLoggedIn(email)
   }
-  
+
   async getUserOrExit(username: string): Promise<User> {
     return await User.getOrExit(username)
   }

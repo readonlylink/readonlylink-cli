@@ -1,7 +1,6 @@
 import { Command } from "@enchanterjs/enchanter/lib/command"
 import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
 import ty from "@xieyuheng/ty"
-import chunk from "lodash/chunk"
 import { App } from "../../app"
 import { ErrorReporter } from "../../errors/error-reporter"
 import { LocalFileStore } from "../../infra/local-file-store"
@@ -54,21 +53,21 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     try {
       await user.createProjectIfNeed(projectName)
 
+      const entries = Object.entries(files)
+
       console.log({
+        message: "Project uploading ...",
         username,
         project: projectName,
+        directory: argv.directory,
+        files: entries.length,
+        bytes: entries.reduce((sum, [path, file]) => sum + file.length, 0),
       })
 
-      for (const group of chunk(Object.entries(files), 8)) {
-        await user.writeFiles(projectName, Object.fromEntries(group))
-        for (const [path, text] of group) {
-          console.log({ path, size: text.length })
-        }
-      }
+      await user.writeFiles(projectName, files)
 
       console.log({
-        files: Object.keys(files).length,
-        bytes: Object.values(files).reduce((sum, file) => sum + file.length, 0),
+        message: "Project uploaded.",
       })
     } catch (error) {
       const reporter = app.create(ErrorReporter)

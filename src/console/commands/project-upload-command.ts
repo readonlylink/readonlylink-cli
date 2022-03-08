@@ -55,14 +55,25 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
 
       const entries = Object.entries(files)
 
-      console.log({
-        message: "Project uploading ...",
-        username,
-        project: projectName,
-        directory: argv.directory,
-        files: entries.length,
-        bytes: entries.reduce((sum, [path, file]) => sum + file.length, 0),
-      })
+      console.dir(
+        {
+          message: "Project uploading ...",
+          username,
+          project: projectName,
+          directory: argv.directory,
+          files: entries.length,
+          bytes: entries.reduce((sum, [path, file]) => sum + file.length, 0),
+          hints: [
+            {
+              message:
+                "Uploading is often slower then downloading, due to the trade-off chosen by the internet providers.",
+              suggestion:
+                "Use the `file-upload` command when uploading a single file.",
+            },
+          ],
+        },
+        { depth: null }
+      )
 
       await user.writeFiles(projectName, files)
 

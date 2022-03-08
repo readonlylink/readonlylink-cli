@@ -29,7 +29,7 @@ export class Ro {
         data: { username, token },
       } = await axios.get(links.verify_for_token)
 
-      await User.login({ username, email, token })
+      await User.create({ username, email, token })
 
       console.log({
         message: "Login success, information saved in ~/.readonlylink",

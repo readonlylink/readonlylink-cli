@@ -1,6 +1,6 @@
-- `user-list` command
-
 - restore `isLoggedIn` check
+
+- `user-list` command
 
 - `FileDownloadCommand`
 - `FileUploadCommand`

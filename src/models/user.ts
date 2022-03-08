@@ -23,14 +23,15 @@ export class User {
     return new User(username)
   }
 
-  static async login(opts: {
+  static async create(opts: {
     username: string
     email: string
     token: string
-  }): Promise<void> {
+  }): Promise<User> {
     const local = this.createLocal(opts.username)
     await local.put("access-token", opts.token)
     await local.put("email", opts.email)
+    return new User(opts.username)
   }
 
   async logout(): Promise<void> {

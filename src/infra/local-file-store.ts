@@ -79,7 +79,12 @@ export class LocalFileStore {
   }
 
   async directories(path: string): Promise<Array<string>> {
-    return await fs.promises.readdir(this.resolve(path))
+    try {
+      await fs.promises.access(this.resolve(path))
+      return await fs.promises.readdir(this.resolve(path))
+    } catch (_error) {
+      return []
+    }
   }
 
   async allFiles(

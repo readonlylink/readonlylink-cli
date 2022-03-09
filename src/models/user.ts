@@ -56,10 +56,15 @@ export class User {
   static async all(): Promise<Array<User>> {
     const local = this.createLocal("")
     const directories = await local.directories("")
+    const users: Array<User> = []
+    for (const directory of directories) {
+      const user = await this.get(directory)
+      if (user !== undefined) {
+        users.push(user)
+      }
+    }
 
-    return await Promise.all(
-      directories.map((directory) => this.getOrFail(directory))
-    )
+    return users
   }
 
   static async isLoggedIn(email: string): Promise<boolean> {

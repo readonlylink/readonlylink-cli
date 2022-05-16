@@ -1,0 +1,1 @@
+- `ro file-upload` should take project name as the first argument

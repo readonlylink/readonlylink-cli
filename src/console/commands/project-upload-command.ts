@@ -6,7 +6,7 @@ import { ErrorReporter } from "../../errors/error-reporter"
 import { LocalFileStore } from "../../infra/local-file-store"
 import { Ro } from "../../ro"
 
-type Args = { directory: string; project: string }
+type Args = { project: string; directory: string }
 type Opts = {}
 
 export class ProjectUploadCommand extends Command<Args, Opts> {
@@ -14,7 +14,7 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
 
   description = "Upload a directory as project"
 
-  args = { directory: ty.string(), project: ty.string() }
+  args = { project: ty.string(), directory: ty.string() }
   opts = {}
 
   // prettier-ignore
@@ -27,12 +27,12 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
       `Note that, it knows about the ${blue(".gitignore")} and ${blue(".roignore")} file,`,
       `and the ${blue(".git/")} directory will also be ignored.`,
       ``,
-      blue(`  ${runner.name} ${this.name} ./cicada-monologues xieyuheng/cicada-monologues`),
-      blue(`  ${runner.name} ${this.name} ./inner xieyuheng/xieyuheng`),
+      blue(`  ${runner.name} ${this.name} xieyuheng/cicada-monologues ./cicada-monologues`),
+      blue(`  ${runner.name} ${this.name} xieyuheng/xieyuheng ./inner`),
       ``,
       `We can omit project name if it is the same as user name.`,
       ``,
-      blue(`  ${runner.name} ${this.name} ./inner xieyuheng`),
+      blue(`  ${runner.name} ${this.name} xieyuheng ./inner`),
       ``,
     ].join("\n")
   }

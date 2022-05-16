@@ -6,7 +6,7 @@ import { ErrorReporter } from "../../errors/error-reporter"
 import { LocalFileStore } from "../../infra/local-file-store"
 import { Ro } from "../../ro"
 
-type Args = { file: string; project: string }
+type Args = { project: string; file: string }
 type Opts = {}
 
 export class FileUploadCommand extends Command<Args, Opts> {
@@ -14,7 +14,7 @@ export class FileUploadCommand extends Command<Args, Opts> {
 
   description = "Upload a file to a project"
 
-  args = { file: ty.string(), project: ty.string() }
+  args = { project: ty.string(), file: ty.string() }
   opts = {}
 
   // prettier-ignore
@@ -26,11 +26,11 @@ export class FileUploadCommand extends Command<Args, Opts> {
       ``,
       `Note that, it must be ran in a project's root directory.`,
       ``,
-      blue(`  ${runner.name} ${this.name} README.md xieyuheng/xieyuheng`),
+      blue(`  ${runner.name} ${this.name} xieyuheng/xieyuheng README.md`),
       ``,
       `We can omit project name if it is the same as user name.`,
       ``,
-      blue(`  ${runner.name} ${this.name} README.md xieyuheng`),
+      blue(`  ${runner.name} ${this.name} xieyuheng README.md`),
       ``,
     ].join("\n")
   }

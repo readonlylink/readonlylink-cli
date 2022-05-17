@@ -1,5 +1,4 @@
-import { Command } from "@enchanterjs/enchanter/lib/command"
-import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
+import { Command, CommandRunner } from "@xieyuheng/command-line"
 import { App } from "../../app"
 import { Ro } from "../../ro"
 
@@ -15,7 +14,7 @@ export class UserListCommand extends Command<Args, Opts> {
   opts = {}
 
   // prettier-ignore
-  help(runner: CommandRunner<App>): string {
+  help(runner: CommandRunner): string {
     const { blue } = this.colors
 
     return [
@@ -26,7 +25,8 @@ export class UserListCommand extends Command<Args, Opts> {
     ].join("\n")
   }
 
-  async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
+  async execute(argv: Args & Opts): Promise<void> {
+    const app = await App.build()
     const ro = app.create(Ro)
 
     const users = await ro.allUsers()

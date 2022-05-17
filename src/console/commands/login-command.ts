@@ -1,5 +1,4 @@
-import { Command } from "@enchanterjs/enchanter/lib/command"
-import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
+import { Command, CommandRunner } from "@xieyuheng/command-line"
 import ty from "@xieyuheng/ty"
 import { App } from "../../app"
 import { ErrorReporter } from "../../errors/error-reporter"
@@ -17,7 +16,7 @@ export class LoginCommand extends Command<Args, Opts> {
   opts = { force: ty.optional(ty.boolean()) }
 
   // prettier-ignore
-  help(runner: CommandRunner<App>): string {
+  help(runner: CommandRunner): string {
     const { blue } = this.colors
 
     return [
@@ -31,7 +30,8 @@ export class LoginCommand extends Command<Args, Opts> {
     ].join("\n")
   }
 
-  async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
+  async execute(argv: Args & Opts): Promise<void> {
+    const app = await App.build()
     const ro = app.create(Ro)
 
     if ((await ro.isUserLoggedIn(argv.email)) && !argv.force) {

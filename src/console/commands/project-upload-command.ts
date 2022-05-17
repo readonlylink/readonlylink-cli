@@ -1,5 +1,4 @@
-import { Command } from "@enchanterjs/enchanter/lib/command"
-import { CommandRunner } from "@enchanterjs/enchanter/lib/command-runner"
+import { Command, CommandRunner } from "@xieyuheng/command-line"
 import ty from "@xieyuheng/ty"
 import { App } from "../../app"
 import { ErrorReporter } from "../../errors/error-reporter"
@@ -18,7 +17,7 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
   opts = {}
 
   // prettier-ignore
-  help(runner: CommandRunner<App>): string {
+  help(runner: CommandRunner): string {
     const { blue } = this.colors
 
     return [
@@ -37,10 +36,11 @@ export class ProjectUploadCommand extends Command<Args, Opts> {
     ].join("\n")
   }
 
-  async execute(argv: Args & Opts, { app }: CommandRunner<App>): Promise<void> {
+  async execute(argv: Args & Opts): Promise<void> {
     let [username, projectName] = argv.project.split("/")
     if (!projectName) projectName = username
 
+    const app = await App.build()
     const ro = app.create(Ro)
     const user = await ro.getUserOrExit(username)
 

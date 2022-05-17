@@ -7,6 +7,6 @@ process.on("unhandledRejection", (error) => {
   process.exit(1)
 })
 
-const { buildCommandRunner } = require("../lib/console")
+const { createCommandRunner } = require("../lib/console")
 
-buildCommandRunner().then((commandRunner) => commandRunner.run())
+createCommandRunner().run()

@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "test:js": "enchanter test node 'lib/**/*.test.js'",
+    "test:js": "test-runner test node 'lib/**/*.test.js'",
     "test": "npm-run-all test:*",
     "format": "prettier src --write"
   },
@@ -24,6 +24,7 @@
     "@types/lodash": "^4.14.182",
     "@types/nanoid": "^2.1.0",
     "@types/node": "^17.0.34",
+    "@xieyuheng/test-runner": "^0.2.5",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "prettier-plugin-organize-imports": "^2.3.4",

@@ -1,5 +1,4 @@
-import { Coupler } from "../../infra/coupler"
-import { Provider } from "../../infra/provider"
+import { Coupler, Provider } from "@xieyuheng/coupler"
 import { Ro } from "../../ro"
 
 export class RoProvider extends Provider {

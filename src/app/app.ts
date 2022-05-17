@@ -1,4 +1,4 @@
-import { Coupler } from "../infra/coupler"
+import { Coupler } from "@xieyuheng/coupler"
 import * as Providers from "./providers"
 
 export class App extends Coupler {

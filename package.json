@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@xieyuheng/command-line": "^0.0.7",
+    "@xieyuheng/coupler": "^0.0.2",
     "@xieyuheng/ty": "^0.1.12",
     "axios": "^0.27.2",
     "fast-deep-equal": "^3.1.3",

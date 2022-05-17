@@ -1,9 +1,9 @@
 import { ErrorReporter } from "../../errors/error-reporter"
-import { ServiceContainer } from "../../infra/service-container"
-import { ServiceProvider } from "../../infra/service-provider"
+import { Coupler } from "../../infra/coupler"
+import { Provider } from "../../infra/provider"
 
-export class ErrorReporterProvider extends ServiceProvider {
-  async register(app: ServiceContainer): Promise<void> {
+export class ErrorReporterProvider extends Provider {
+  async register(app: Coupler): Promise<void> {
     app.singleton(ErrorReporter, (app) => {
       return new ErrorReporter()
     })

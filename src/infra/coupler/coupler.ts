@@ -1,10 +1,10 @@
 import { Logger } from "../logger"
 import * as Loggers from "../loggers"
-import { ServiceProvider } from "../service-provider"
+import { Provider } from "../provider"
 
 type Constructor = abstract new (...args: Array<any>) => any
 
-export class ServiceContainer {
+export class Coupler {
   logger: Logger = new Loggers.PrettyLogger()
 
   create<C extends Constructor>(inputClass: C): InstanceType<C> {
@@ -13,7 +13,7 @@ export class ServiceContainer {
 
   bind<C1 extends Constructor>(
     GivenClass: C1,
-    factory: (container: ServiceContainer) => InstanceType<C1>
+    factory: (container: Coupler) => InstanceType<C1>
   ): void {
     const create = this.create
 
@@ -32,7 +32,7 @@ export class ServiceContainer {
 
   singleton<C1 extends Constructor>(
     GivenClass: C1,
-    factory: (container: ServiceContainer) => InstanceType<C1>
+    factory: (container: Coupler) => InstanceType<C1>
   ): void {
     const create = this.create
 
@@ -52,7 +52,7 @@ export class ServiceContainer {
   }
 
   async bootstrap(
-    providers: Array<ServiceProvider>,
+    providers: Array<Provider>,
     opts: { silent?: boolean } = {}
   ): Promise<void> {
     for (const provider of providers) {

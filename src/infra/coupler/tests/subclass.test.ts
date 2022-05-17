@@ -1,4 +1,4 @@
-import { ServiceContainer } from "../../service-container"
+import { Coupler } from ".."
 
 class Logger {
   instanceofLogger = true
@@ -29,7 +29,7 @@ class DbResource extends Resource {
   }
 }
 
-const app = new ServiceContainer()
+const app = new Coupler()
 
 app.bind(Logger, () => new Logger())
 

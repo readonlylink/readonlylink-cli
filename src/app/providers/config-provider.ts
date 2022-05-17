@@ -1,9 +1,9 @@
 import { Config } from "../../config"
-import { ServiceContainer } from "../../infra/service-container"
-import { ServiceProvider } from "../../infra/service-provider"
+import { Coupler } from "../../infra/coupler"
+import { Provider } from "../../infra/provider"
 
-export class ConfigProvider extends ServiceProvider {
-  async register(app: ServiceContainer): Promise<void> {
+export class ConfigProvider extends Provider {
+  async register(app: Coupler): Promise<void> {
     app.singleton(Config, (app) => {
       return new Config()
     })

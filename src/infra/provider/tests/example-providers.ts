@@ -1,5 +1,5 @@
-import { ServiceContainer } from "../../service-container"
-import { ServiceProvider } from "../../service-provider"
+import { Provider } from ".."
+import { Coupler } from "../../coupler"
 
 export class Logger {
   instanceofLogger = true
@@ -9,8 +9,8 @@ export class Logger {
   }
 }
 
-export class LoggerProvider extends ServiceProvider {
-  async register(app: ServiceContainer): Promise<void> {
+export class LoggerProvider extends Provider {
+  async register(app: Coupler): Promise<void> {
     app.bind(Logger, () => new Logger())
   }
 }
@@ -36,8 +36,8 @@ export class DbResource extends Resource {
   }
 }
 
-export class DbResourceProvider extends ServiceProvider {
-  async register(app: ServiceContainer): Promise<void> {
+export class DbResourceProvider extends Provider {
+  async register(app: Coupler): Promise<void> {
     app.bind(Resource, (app) => new DbResource({ logger: app.create(Logger) }))
   }
 }

@@ -1,8 +1,1 @@
-- rename `ServiceContainer` and `ServiceProvider`
-
-  Alternate name:
-
-  - `ServiceContainer` -- factory, central factory, assembler, assembly line, locator, manufacturer
-  - `ServiceProvider` -- provider
-
-- extract `ServiceContainer` and `ServiceProvider` a package
+- extract `Coupler` and `Provider` to a package -- `@xieyuheng/coupler`

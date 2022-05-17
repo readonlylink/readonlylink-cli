@@ -1,5 +1,5 @@
+import { Coupler } from ".."
 import { assert } from "../../../ut/assertions"
-import { ServiceContainer } from "../../service-container"
 
 class Logger {
   instanceofLogger = true
@@ -31,7 +31,7 @@ class Service {
   }
 }
 
-const app = new ServiceContainer()
+const app = new Coupler()
 
 app.bind(Logger, () => new Logger())
 

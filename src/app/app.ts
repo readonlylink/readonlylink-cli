@@ -1,7 +1,7 @@
-import { ServiceContainer } from "../infra/service-container"
+import { Coupler } from "../infra/coupler"
 import * as Providers from "./providers"
 
-export class App extends ServiceContainer {
+export class App extends Coupler {
   static async build(): Promise<App> {
     const app = new App()
     const providers = Object.values(Providers).map((Provider) => new Provider())

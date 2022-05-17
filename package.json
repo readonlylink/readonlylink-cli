@@ -1,6 +1,6 @@
 {
   "name": "@readonlylink/cli",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "repository": "github:readonlylink/readonlylink-cli",
   "files": [
     "lib"

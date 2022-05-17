@@ -1,4 +1,4 @@
-import { ServiceContainer } from "@enchanterjs/enchanter/lib/service-container"
+import { ServiceContainer } from "../infra/service-container"
 import * as Providers from "./providers"
 
 export class App extends ServiceContainer {

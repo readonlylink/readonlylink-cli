@@ -30,7 +30,6 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@enchanterjs/enchanter": "^0.1.41",
     "@xieyuheng/command-line": "^0.0.7",
     "@xieyuheng/ty": "^0.1.12",
     "axios": "^0.27.2",

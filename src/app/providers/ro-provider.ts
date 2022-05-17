@@ -1,5 +1,5 @@
-import { ServiceContainer } from "@enchanterjs/enchanter/lib/service-container"
-import { ServiceProvider } from "@enchanterjs/enchanter/lib/service-provider"
+import { ServiceContainer } from "../../infra/service-container"
+import { ServiceProvider } from "../../infra/service-provider"
 import { Ro } from "../../ro"
 
 export class RoProvider extends ServiceProvider {
